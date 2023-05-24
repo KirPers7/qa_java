@@ -1,26 +1,14 @@
 package com.example;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
 import java.util.List;
 
-@Getter
-@Setter
-@Accessors
 public class Lion {
 
     boolean hasMane;
-    private Feline feline;
+    private final Feline feline;
 
-    public Lion setFeline(Feline feline) {
+    public Lion(String sex, Feline feline) throws Exception {
         this.feline = feline;
-        return this;
-    }
-
-
-    public Lion(String sex) throws Exception {
         if ("Самец".equals(sex)) {
             hasMane = true;
         } else if ("Самка".equals(sex)) {

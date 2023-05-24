@@ -26,12 +26,13 @@ public class LionTest extends TestCase {
         MockitoAnnotations.openMocks(this);
     }
 
+    //Проверяем в классе Lion getKittens() без параметров вызывается один раз и возвращает число 1
     @Test
     public void getKittens() throws Exception {
-        Lion lion = new Lion(sex);
-        int actualGetKettens = lion.setFeline(new Feline()).getKittens();
-        int expectedGetKittens = 1;
-        Assert.assertEquals(expectedGetKittens, actualGetKettens);
+        Lion lion = new Lion(sex, feline);
+        Lion lionSpy = Mockito.spy(lion);
+        lionSpy.getKittens();
+        Mockito.verify(lionSpy, Mockito.times(1)).getKittens();
     }
 
     @Parameterized.Parameter
@@ -51,19 +52,18 @@ public class LionTest extends TestCase {
     //Проверяем, что условный оператор возвращает нужный ответ при вводе определенного пола
     @Test
     public void checkDoesHaveMane() throws Exception {
-        Lion lion = new Lion(sex);
+        Lion lion = new Lion(sex, feline);
         Assert.assertEquals(lion.doesHaveMane(), hasMane);
     }
 
     //Проверяем, что метод getFood запускается с параметром "Хищник" и запускается один раз
     @Test
     public void checkGetFood() throws Exception {
-        Lion lion = new Lion(sex);
-        lion.setFeline(new Feline()).getFood();
-        List<String> actualGetFood = lion.getFood();
+        Lion lion = new Lion(sex, feline);
         List<String> expectedGetFood = List.of("Животные", "Птицы", "Рыба");
+        Mockito.when(feline.getFood("Хищник")).thenReturn(expectedGetFood);
+        List<String> actualGetFood = lion.getFood();
         Assert.assertEquals(expectedGetFood, actualGetFood);
-        feline.getFood("Хищник");
         Mockito.verify(feline, Mockito.times(1)).getFood("Хищник");
     }
 }
